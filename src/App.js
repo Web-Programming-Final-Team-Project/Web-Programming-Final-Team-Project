@@ -12,6 +12,7 @@ function App() {
   return (
     <div className="kiosk-screen" onClick={handleClick}>
       <p>화면을 터치ssss해 주세ssssss요ss</p>
+      <p>sex</p>
     </div>
   );
 }
