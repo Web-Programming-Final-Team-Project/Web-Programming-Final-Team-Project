@@ -10,9 +10,9 @@ function App() {
   };
 
   return (
-      <div className="kiosk-screen" onClick={handleClick}>
-        <p>화면을 터치해 주세요</p>
-      </div>
+    <div className="kiosk-screen" onClick={handleClick}>
+      <p>화면을 터치해 주세ssssss요ss</p>
+    </div>
   );
 }
 
