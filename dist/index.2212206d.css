@@ -1,0 +1,26 @@
+body {
+  color: #fff;
+  background-color: #333;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  font-size: 24px;
+  display: flex;
+}
+
+.kiosk-screen {
+  text-align: center;
+  cursor: pointer;
+  background-color: #444;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 10px #00000080;
+}
+
+.kiosk-screen:hover {
+  background-color: #555;
+}
+/*# sourceMappingURL=index.2212206d.css.map */

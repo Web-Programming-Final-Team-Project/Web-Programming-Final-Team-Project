@@ -3,7 +3,8 @@ import React from "react";
 function NextPage() {
     return (
         <div>
-            <h1>다음 화면에 오신 것을 환영합니다!</h1>
+            <h1>Next Page</h1>
+            <p>이곳은 다음 페이지입니다.</p>
         </div>
     );
 }
