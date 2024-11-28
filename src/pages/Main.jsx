@@ -1,13 +1,27 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import DKUlogo from "../assets/images/DKUlogo.svg";
 
+const reveal = keyframes`
+    0% {
+        opacity: 0;
+        transform: translateY(10%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+`;
+
 const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #F7F7F7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #F7F7F7;
+    opacity: 0; 
+    transform: translateY(10%);
+    animation: ${reveal} 1s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
 `;
 
 const Header = styled.div`
@@ -17,15 +31,16 @@ const Header = styled.div`
 `;
 
 const Logo = styled.img`
-    height: 10vw; /* 화면 너비의 10%로 설정 */
-    max-height: 80px; /* 최대 높이는 80px로 제한 */
+    height: 10vw;
+    max-height: 80px; 
     object-fit: contain;
 `;
 
+
 const Grid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); 
-  gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
 `;
 
 const Button = styled.button`
@@ -48,7 +63,7 @@ const Button = styled.button`
         transform: translateY(-5px);
     }
 
-    &:active {  
+    &:active {
         background-color: #64b5f6;
         transform: translateY(0);
         box-shadow: none;
