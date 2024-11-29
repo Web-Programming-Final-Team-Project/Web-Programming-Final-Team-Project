@@ -19,7 +19,7 @@ const Wrapper = styled.div`
     flex-direction: column;
     align-items: center;
     background-color: #F7F7F7;
-    opacity: 0; 
+    opacity: 0;
     transform: translateY(10%);
     animation: ${reveal} 1s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
 `;
@@ -32,7 +32,7 @@ const Header = styled.div`
 
 const Logo = styled.img`
     height: 10vw;
-    max-height: 80px; 
+    max-height: 80px;
     object-fit: contain;
 `;
 
