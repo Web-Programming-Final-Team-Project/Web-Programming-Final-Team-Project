@@ -10,6 +10,7 @@ body {
   background-color: #F7F7F7;
   color: #ffffff;
 }
+
 .kiosk-screen-touch {
   position: absolute;
   top: 0;
@@ -38,31 +39,31 @@ body {
 }
 
 .hospital-title-top {
-  font-size: calc(75px + 2.5vmin);
+  font-size: calc(4.6875rem + 2.5vmin);
   font-weight: bold;
   opacity: 0;
   animation: reveal-fast 2.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
 }
 
 .hospital-title-bottom {
-  font-size: calc(40px + 2.5vmin);
+  font-size: calc(2.5rem + 2.5vmin);
   font-weight: bold;
-  margin-bottom: 35px;
+  margin-bottom: 2.1875rem;
   opacity: 0;
   animation: reveal-fast 3.05s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
 }
 
 .kiosk-screen-touch p {
-  font-size: calc(16px + 2.5vmin);
+  font-size: calc(1rem + 2.5vmin);
   opacity: 0;
   animation: reveal-slow 2.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
   background-color: #0c82ec;
   color: #ffffff;
-  padding: 15px 30px;
-  border-radius: 25px;
+  padding: 0.9375rem 1.875rem;
+  border-radius: 1.5625rem;
   text-align: center;
-  margin-top: 30px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+  margin-top: 1.875rem;
+  box-shadow: 0px 0.25rem 0.375rem rgba(0, 0, 0, 0.5);
   cursor: pointer;
   transition: transform 0.2s ease, background-color 0.2s ease;
 }
@@ -70,7 +71,6 @@ body {
 .kiosk-screen-touch p:hover {
   background-color: #0b70ca;
 }
-
 
 @keyframes reveal-fast {
   0% {

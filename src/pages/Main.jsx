@@ -25,22 +25,21 @@ const Wrapper = styled.div`
 `;
 
 const Header = styled.div`
-    margin-bottom: 70px;
+    margin-bottom: 4.375rem;
     display: flex;
     justify-content: center;
 `;
 
 const Logo = styled.img`
     height: 10vw;
-    max-height: 80px;
+    max-height: 5rem; 
     object-fit: contain;
 `;
-
 
 const Grid = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    gap: 1.25rem;
 `;
 
 const Button = styled.button`
@@ -49,9 +48,9 @@ const Button = styled.button`
     letter-spacing: 1.4px;
     background-color: ${(props) => (props.highlight ? "#bbdefb" : "#ffffff")};
     border: none;
-    border-radius: 10px;
-    padding: 80px 60px;
-    font-size: 33px;
+    border-radius: 0.625rem; 
+    padding: 5rem 3.75rem;  
+    font-size: 2.0625rem; 
     font-weight: bold;
     color: #406ac1;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);

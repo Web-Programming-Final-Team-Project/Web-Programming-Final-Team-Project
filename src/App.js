@@ -4,6 +4,7 @@ import "./App.css";
 import Main from "./pages/Main";
 import Departments from "./pages/Departments"
 import StaffCall from "./pages/StaffCall";
+import FloorGuide from "./pages/Floor_guide"
 
 const MainPage = () => {
     const navigate = useNavigate();
@@ -33,6 +34,7 @@ const App = () => {
                 <Route path="/main" element={<Main />} /> {}
                 <Route path="/departments" element={<Departments />} /> {}
                 <Route path="/staff-call" element={<StaffCall />} /> {}
+                <Route path="/floor-guide" element={<FloorGuide />} /> {}
             </Routes>
         </BrowserRouter>
     );

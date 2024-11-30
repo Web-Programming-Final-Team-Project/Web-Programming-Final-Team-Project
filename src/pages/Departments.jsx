@@ -29,7 +29,7 @@ const Wrapper = styled.div`
 `;
 
 const Header = styled.div`
-    font-size: calc(25px + 1.5vmin);
+    font-size: 2.5rem;
     font-weight: bold;
     color: #406ac1;
     text-align: center;
@@ -43,15 +43,16 @@ const Tabs = styled.div`
     margin-bottom: 30px;
 `;
 
+
 const Tab = styled.button`
     background-color: ${(props) => (props.active ? "#406ac1" : "#ffffff")};
     color: ${(props) => (props.active ? "#ffffff" : "#406ac1")};
     border: none;
-    border-radius: 10px;
-    padding: 10px 25px;
-    margin: 0 8px;
+    border-radius: 0.625rem; 
+    padding: 0.625rem 1.5625rem;
+    margin: 0 0.5rem; 
     cursor: pointer;
-    font-size: 15px;
+    font-size: 0.9375rem; 
     letter-spacing: 1.4px;
     font-weight: bold;
     font-family: 'Do Hyeon', sans-serif;
@@ -73,21 +74,20 @@ const Tab = styled.button`
 const Grid = styled.div`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    gap: 1.25rem; 
     width: 100%;
-    max-width: 700px;
+    max-width: 43.75rem;  
 `;
 
 const Button = styled.button`
-    @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Jua&display=swap');
     font-family: "Do Hyeon", sans-serif;
     letter-spacing: 1.4px;
     background-color: ${(props) => (props.highlight ? "#bbdefb" : "#ffffff")};
     border: none;
-    border-radius: 10px;
-    height: 100px;
+    border-radius: 0.625rem; 
+    height: 6.25rem; 
     width: 100%;
-    font-size: 20px;
+    font-size: 1.25rem; 
     font-weight: bold;
     color: #406ac1;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -111,14 +111,14 @@ const BackButton = styled.button`
     font-family: "Do Hyeon", sans-serif;
     position: fixed;
     top: 65%;
-    left: -5%; 
+    left: 0;
     transform: translateY(-50%);
     background-color: ${(props) => (props.highlight ? "#9fbcd5" : "#c2e5ff")};
     border: none;
-    border-radius: 60px;
-    padding: 20px 30px;
+    border-radius: 3.75rem; 
+    padding: 1.25rem 1.875rem;
     color: #406ac1;
-    font-size: 20px;
+    font-size: 1.25rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     font-weight: bold;
     cursor: pointer;
@@ -135,20 +135,18 @@ const BackButton = styled.button`
         box-shadow: none;
     }
 
-
-
     @media (max-width: 1025px) {
         top: auto;
         bottom: -15%;
         left: 50%;
-        transform: translate(-50%, 0); 
+        transform: translate(-50%, 0);
         width: 70%;
-        font-size: 16px;
-        padding: 15px;
-        border-radius: 30px;
+        font-size: 1rem; 
+        padding: 0.9375rem;
+        border-radius: 1.875rem;  
 
         &:hover {
-            transform: scale(1.0) translate(-50%, 0); 
+            transform: scale(1.0) translate(-50%, 0);
         }
 
         &:active {
@@ -180,7 +178,6 @@ function Departments() {
                 backdrop: `
                      rgba(0, 0, 0, 0.8)
                     `,
-
             });
         });
     };
