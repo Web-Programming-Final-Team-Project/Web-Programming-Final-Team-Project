@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { useNavigate } from 'react-router-dom';
 
@@ -49,24 +49,16 @@ const Header = styled.div`
   font-weight: bold;
   color: #406ac1;
   text-align: center;
-  margin-top: 10px;
-  padding: 20px;
   position: relative;
 
-  &::after {
-    content: "";
-    display: block;
-    width: 100%;
-    height: 4px;
-    background-color: #406ac1;
-    margin: 10px auto 0;
-  }
+    @media (max-width: 1024px) {
+        font-size: calc(10px + 3vmin);
+    }
 `;
 
 const Tabs = styled.div`
   display: flex;
   justify-content: center;
-  margin-bottom: 30px;
 `;
 
 const Tab = styled.button`
@@ -78,7 +70,7 @@ const Tab = styled.button`
   padding: 10px 25px;
   margin: 0 8px;
   cursor: pointer;
-  font-size: 15px;
+  font-size: calc(5px + 1.7vmin);
   font-weight: bold;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
@@ -93,6 +85,12 @@ const Tab = styled.button`
     transform: translateY(0);
     box-shadow: none;
   }
+
+    @media (max-width: 1024px) {
+        font-size: calc(5px + 1.3vmin);
+        padding: 8px 12px;
+    }
+    
 `;
 
 const Grid = styled.div`
@@ -105,43 +103,53 @@ const Grid = styled.div`
 `;
 
 const Button = styled.button`
-    @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Jua&display=swap');
     font-family: "Do Hyeon", sans-serif;
-  letter-spacing: 1.4px;
-  background-color: ${(props) => (props.active ? "#406ac1" : "#ffffff")};
-  color: ${(props) => (props.active ? "#ffffff" : "#406ac1")};
-  border: none;
-  border-radius: 10px;
-  height: 50px;
-  width: calc(100% / 6 - 10px); /* 6개 버튼을 한 줄에 배치 */
-  font-size: 14px;
-  font-weight: bold;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+    letter-spacing: 1.4px;
+    background-color: ${(props) => (props.active ? "#406ac1" : "#ffffff")};
+    color: ${(props) => (props.active ? "#ffffff" : "#406ac1")};
+    border: none;
+    border-radius: 10px;
+    min-width: 80px;
+    max-width: 100%;
+    padding: 10px 15px;
+    font-size: calc(5px + 1.7vmin);
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    white-space: nowrap;
+    word-break: keep-all;
 
-  &:hover {
-    background-color: #90caf9;
-    transform: translateY(-5px);
-  }
+    &:hover {
+        background-color: #90caf9;
+        transform: translateY(-5px);
+    }
 
-  &:active {
-    background-color: #64b5f6;
-    transform: translateY(0);
-    box-shadow: none;
-  }
+    &:active {
+        background-color: #64b5f6;
+        transform: translateY(0);
+        box-shadow: none;
+    }
+
+    @media (max-width: 1024px) {
+        font-size: calc(5px + 1.3vmin);
+        padding: 8px 12px;
+    }
 `;
+
 
 const Image = styled.img`
-  width: 100%;
-  max-width: 600px;
-  margin-top: 20px;
-  border: 1px solid #ccc;
+    width: 100%;
+    max-width: 500px;
+    margin-top: 20px;
+    margin-bottom: 15px; 
+    border: 1px solid #ccc;
 `;
+
 const BackButton = styled.button`
     @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Jua&display=swap');
     font-family: "Do Hyeon", sans-serif;
@@ -191,32 +199,166 @@ const BackButton = styled.button`
     }
 `;
 
+const AutoCompleteList = styled.ul`
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 100%; 
+    background: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 100%; 
+    left: 0; 
+    z-index: 10;
+    overflow-y: auto;
+    max-height: 200px;
+    box-sizing: border-box;
+`;
+
+const AutoCompleteItem = styled.li`
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    color: #406ac1;
+    border-bottom: 1px solid #ccc; 
+
+    &:hover {
+        background-color: #f0f0f0;
+    }
+
+    &:last-child {
+        border-bottom: none;
+    }
+`;
+
+const SearchContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 20px auto;
+    width: 100%;
+    max-width: 700px;
+    gap: 10px;
+    position: relative;
+
+    @media (max-width: 768px) {
+        flex-direction: column; 
+        gap: 15px; 
+    }
+`;
+
+const SearchInput = styled.input`
+    font-family: "Do Hyeon", sans-serif;
+    flex: 1;
+    padding: 10px 15px;
+    font-size: calc(10px + 1.5vmin);
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    outline: none;
+    transition: border-color 0.3s ease;
+    min-width: 250px; 
+    max-width: 300px;
+
+    &:focus {
+        border-color: #406ac1;
+    }
+
+    @media (max-width: 768px) {
+        font-size: calc(8px + 1.3vmin);
+        padding: 8px 12px;
+        min-width: 250px; 
+        max-width: 300px;
+    }
+`;
+
+const SearchButton = styled.button`
+    font-family: "Do Hyeon", sans-serif;
+    padding: 10px 20px;
+    font-size: calc(10px + 1.5vmin);
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #406ac1;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    min-width: 100px;
+    max-width: 120px; 
+
+    &:hover {
+        background-color: #90caf9;
+    }
+
+    &:active {
+        background-color: #64b5f6;
+        box-shadow: none;
+    }
+
+    @media (max-width: 768px) {
+        font-size: calc(8px + 1.3vmin);
+        padding: 8px 16px;
+        min-width: 100px; 
+        max-width: 120px;
+    }
+`;
+
 function FloorGuide() {
-    const navigate = useNavigate(); // useNavigate로 navigate 초기화
+    const navigate = useNavigate();
 
     const categories = {
         "전체 조감도": [overallView],
         진료동: [
-            { label: "1층", image: medicalBuilding1 },
-            { label: "2층", image: medicalBuilding2 },
-            { label: "3층", image: medicalBuilding3 },
-            { label: "4층", image: medicalBuilding4 },
-            { label: "5층", image: medicalBuilding5 },
+            { label: "1층", image: medicalBuilding1, keywords: ["재활의학과", "약제","의료정보팀","정신건강의학과",
+                    "핵의학과","방사선종양학과","충남권역응급의료센터","권역외상센터"] },
+
+            { label: "2층", image: medicalBuilding2, keywords: ["진단검사의학과","영상의학과","혈관조영센터",
+                    "CT","MRI", "성형외과", "정형외과", "가정의학과", "내분비당뇨센터", "신장내과", "일반내과",
+                    "감염내과", "심장혈관내과", "기능검사부", "신경과", "흉부외과", "소아청소년과"] },
+
+            { label: "3층", image: medicalBuilding3, keywords: [ "심장혈관촬영실", "수술실", "중환자실", "내과계",
+                    "신경외과", "안과", "산부인과", "피부과", "혈액투석실"] },
+
+            { label: "4층", image: medicalBuilding4, keywords: ["병리과","검사실","작업환경의학과"] },
+
+            { label: "5층", image: medicalBuilding5, keywords: ["강당","세미나실"] },
         ],
+        
         "별관(암센터)": [
-            { label: "1층", image: annex1 },
-            { label: "2층", image: annex2 },
-            { label: "3층", image: annex3 },
-            { label: "4층", image: annex4 },
-            { label: "6~8층", image: annex5 },
-            { label: "전체 층별안내", image: annex6 },
+            { label: "1층", image: annex1, keywords: ["화장실","편의점"] },
+
+            { label: "2층", image: annex2, keywords: ["종양암센터","혈액암센터","주사실","호흡기센터",
+                    "알레르기센터","폐암센터","채혈실","이비인후과센터","두경부암센터"] },
+
+            { label: "3층", image: annex3, keywords: ["간센터","담도센터","췌장센터","위장관센터","영상의학과 유방센터"
+                ,"유방암센터","갑상선센터","비뇨의학과센터","비뇨암센터" ] },
+
+            { label: "4층", image: annex4, keywords: ["종합검진센터","소화기내시경센터"] },
+
+            { label: "6층, 7층", image: annex5, keywords: ["61병동","62병동","간호병동","간병병동"
+                ,"71병동","72병동"] },
+
+            { label: "전체층수", image: annex6},
         ],
         병동: [
-            { label: "1층", image: ward1 },
-            { label: "2층", image: ward2 },
-            { label: "3층", image: ward3 },
-            { label: "4층", image: ward4 },
-            { label: "5층", image: ward5 },
+            { label: "1층", image: ward1, keywords: ["격리병동","산모병동","분만실","11병동","소아청소년과"
+                ,"신생아중환자실"] },
+
+            { label: "2층", image: ward2, keywords: ["21병동","22병동","23병동","25병동"] },
+
+            { label: "3층", image: ward3, keywords: ["수면다원검사실","권역외상센터중환자실","권역외상센터입원병동",
+                "31병동","외과"] },
+
+            { label: "4층", image: ward4, keywords: ["41병동","정신건강의학과","보호병동","42-3병동",
+                    "구강외과","이비인후과","기타","43병동","45병동"] },
+
+            { label: "5층", image: ward5, keywords: ["51병동","정형외과","52-3병동","정형외과","신경과","신경외과"
+                ,"재활의학과","55병동","내과"] },
+
             { label: "6층", image: ward6 },
         ],
     };
@@ -225,31 +367,100 @@ function FloorGuide() {
     const [selectedImage, setSelectedImage] = useState(
         categories["전체 조감도"][0]
     );
+    const [searchQuery, setSearchQuery] = useState("");
+    const [suggestions, setSuggestions] = useState([]);
+
+    const suggestionsRef = useRef(null);
 
     const handleCategoryChange = (category) => {
         setActiveCategory(category);
         setSelectedImage(categories[category][0]?.image || categories[category][0]);
     };
 
+    const handleSearchChange = (e) => {
+        const query = e.target.value;
+        setSearchQuery(query);
+
+        if (query.length > 0) {
+            const newSuggestions = [];
+
+            for (const category in categories) {
+                for (const item of categories[category]) {
+                    item.keywords?.forEach((keyword) => {
+                        if (keyword.includes(query) && !newSuggestions.includes(keyword)) {
+                            newSuggestions.push(keyword);
+                        }
+                    });
+                }
+            }
+
+            setSuggestions(newSuggestions.slice(0, 10));
+        } else {
+            setSuggestions([]);
+        }
+    };
+
+    const handleSuggestionClick = (suggestion) => {
+        setSearchQuery(suggestion);
+        setSuggestions([]);
+    };
+
+    const handleSearch = () => {
+        for (const category in categories) {
+            for (const item of categories[category]) {
+                if (item.keywords?.includes(searchQuery)) {
+                    setActiveCategory(category);
+                    setSelectedImage(item.image);
+                    return;
+                }
+            }
+        }
+        alert("검색 결과가 없습니다.");
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                suggestionsRef.current &&
+                !suggestionsRef.current.contains(event.target)
+            ) {
+                setSuggestions([]);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
     return (
         <Wrapper>
-            <Header>보고 싶은 층이나 건물을 선택하세요.</Header>
+            <Header>보고 싶은 층이나 건물을 검색 혹은 선택하세요.</Header>
 
-            <Tabs>
-                {Object.keys(categories).map((category) => (
-                    <Tab
-                        key={category}
-                        active={activeCategory === category}
-                        onClick={() => handleCategoryChange(category)}
-                    >
-                        {category}
-                    </Tab>
-                ))}
-            </Tabs>
+            <SearchContainer>
+                <SearchInput
+                    type="text"
+                    placeholder="검색어를 입력하세요"
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                />
+                {suggestions.length > 0 && (
+                    <AutoCompleteList ref={suggestionsRef}>
+                        {suggestions.map((suggestion, index) => (
+                            <AutoCompleteItem
+                                key={index}
+                                onClick={() => handleSuggestionClick(suggestion)}
+                            >
+                                {suggestion}
+                            </AutoCompleteItem>
+                        ))}
+                    </AutoCompleteList>
+                )}
+                <SearchButton onClick={handleSearch}>검색</SearchButton>
+            </SearchContainer>
 
-            {activeCategory === "전체 조감도" ? (
-                <Image src={selectedImage} alt="전체 조감도" />
-            ) : (
+            {activeCategory === "전체 조감도" ? null : (
                 <Grid>
                     {categories[activeCategory].map((item, index) => (
                         <Button
@@ -263,9 +474,22 @@ function FloorGuide() {
                 </Grid>
             )}
 
-            {activeCategory !== "전체 조감도" && (
-                <Image src={selectedImage} alt={`${activeCategory} 이미지`} />
-            )}
+            <Image
+                src={selectedImage}
+                alt={activeCategory === "전체 조감도" ? "전체 조감도" : `${activeCategory} 이미지`}
+            />
+
+            <Tabs>
+                {Object.keys(categories).map((category) => (
+                    <Tab
+                        key={category}
+                        active={activeCategory === category}
+                        onClick={() => handleCategoryChange(category)}
+                    >
+                        {category}
+                    </Tab>
+                ))}
+            </Tabs>
 
             <BackButton onClick={() => navigate(-1)}>뒤로가기</BackButton>
         </Wrapper>

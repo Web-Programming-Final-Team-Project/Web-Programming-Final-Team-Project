@@ -48,9 +48,9 @@ const Button = styled.button`
     letter-spacing: 1.4px;
     background-color: ${(props) => (props.highlight ? "#bbdefb" : "#ffffff")};
     border: none;
-    border-radius: 0.625rem; 
-    padding: 5rem 3.75rem;  
-    font-size: 2.0625rem; 
+    border-radius: 0.625rem;
+    padding: 5rem 3.75rem;
+    font-size: 2.0625rem;
     font-weight: bold;
     color: #406ac1;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -67,6 +67,17 @@ const Button = styled.button`
         transform: translateY(0);
         box-shadow: none;
     }
+
+    @media (max-width: 767px) {
+        padding: 2.5rem 2rem;
+        font-size: 1.5rem;
+    }
+
+    @media (max-width: 480px) {
+        padding: 2rem 1.5rem; 
+        font-size: 1.25rem; 
+    }
+    
 `;
 
 function Main() {

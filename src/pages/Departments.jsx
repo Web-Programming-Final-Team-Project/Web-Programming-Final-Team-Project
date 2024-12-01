@@ -29,7 +29,7 @@ const Wrapper = styled.div`
 `;
 
 const Header = styled.div`
-    font-size: 2.5rem;
+    font-size: calc(20px + 1.5vmin);
     font-weight: bold;
     color: #406ac1;
     text-align: center;
@@ -41,6 +41,7 @@ const Tabs = styled.div`
     display: flex;
     justify-content: center;
     margin-bottom: 30px;
+    
 `;
 
 
@@ -69,6 +70,11 @@ const Tab = styled.button`
         transform: translateY(0);
         box-shadow: none;
     }
+    
+    @media (max-width: 768px) {
+        height: 2.5rem;
+        font-size: 0.7rem; 
+    }
 `;
 
 const Grid = styled.div`
@@ -84,10 +90,10 @@ const Button = styled.button`
     letter-spacing: 1.4px;
     background-color: ${(props) => (props.highlight ? "#bbdefb" : "#ffffff")};
     border: none;
-    border-radius: 0.625rem; 
-    height: 6.25rem; 
+    border-radius: 0.625rem;
+    height: 6.25rem;
     width: 100%;
-    font-size: 1.25rem; 
+    font-size: 1.25rem;
     font-weight: bold;
     color: #406ac1;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -104,6 +110,11 @@ const Button = styled.button`
         transform: translateY(0);
         box-shadow: none;
     }
+
+    @media (max-width: 768px) {
+        height: 4.5rem;
+        font-size: 0.8rem;
+    }
 `;
 
 const BackButton = styled.button`
@@ -111,7 +122,7 @@ const BackButton = styled.button`
     font-family: "Do Hyeon", sans-serif;
     position: fixed;
     top: 65%;
-    left: 0;
+    left: -10%;
     transform: translateY(-50%);
     background-color: ${(props) => (props.highlight ? "#9fbcd5" : "#c2e5ff")};
     border: none;
@@ -176,8 +187,16 @@ function Departments() {
                 allowOutsideClick: true,
                 heightAuto: false,
                 backdrop: `
-                     rgba(0, 0, 0, 0.8)
-                    `,
+                rgba(0, 0, 0, 0.8)
+            `,
+                showCancelButton: true,
+                cancelButtonText: "접수하기",
+                cancelButtonColor: "#90caf9",
+            }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.cancel) {
+                    // Navigate to the reception page
+                    navigate("/reception");
+                }
             });
         });
     };
