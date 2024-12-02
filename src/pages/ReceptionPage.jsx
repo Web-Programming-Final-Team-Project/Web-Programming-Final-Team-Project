@@ -1,189 +1,102 @@
 import React, { useState, useEffect } from "react";
-import styled, { keyframes } from "styled-components";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import "sweetalert2/src/sweetalert2.scss";
-import { useNavigate } from "react-router-dom";
+import { useQueue } from "./QueueContext";
 
-const reveal = keyframes`
-    0% {
-        opacity: 0;
-        transform: translateY(10%);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-`;
+const styles = {
+    wrapper: {
+        fontFamily: "'Do Hyeon', sans-serif",
+        letterSpacing: "1.4px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        backgroundColor: "#f7f7f7",
+        padding: "20px",
+        height: "100vh",
+    },
+    clock: {
+        fontSize: "1.2rem",
+        color: "#406ac1",
+        marginBottom: "10px",
+    },
+    header: {
+        fontSize: "calc(20px + 1.5vmin)",
+        fontWeight: "bold",
+        color: "#406ac1",
+        textAlign: "center",
+        marginBottom: "20px",
+    },
+    input: {
+        fontFamily: "'Do Hyeon', sans-serif",
+        padding: "10px",
+        border: "1px solid #ccc",
+        borderRadius: "10px",
+        width: "250px",
+        textAlign: "center",
+        fontSize: "1.2rem",
+        marginBottom: "20px",
+    },
+    keypad: {
+        display: "grid",
+        gridTemplateColumns: "repeat(3, 1fr)",
+        gap: "10px",
+        marginBottom: "20px",
+    },
+    keyButton: {
+        backgroundColor: "#f0f0f0",
+        border: "1px solid #ccc",
+        borderRadius: "8px",
+        fontSize: "1.5rem",
+        padding: "15px",
+        color: "#406ac1",
+        fontWeight: "bold",
+        cursor: "pointer",
+        transition: "all 0.3s ease",
+    },
+    button: {
+        backgroundColor: "#bbdefb",
+        border: "none",
+        borderRadius: "10px",
+        padding: "10px 20px",
+        fontSize: "1rem",
+        fontWeight: "bold",
+        color: "#406ac1",
+        cursor: "pointer",
+        margin: "10px 0",
+    },
+    backButton: {
+        backgroundColor: "#c2e5ff",
+        border: "none",
+        borderRadius: "30px",
+        padding: "15px 30px",
+        color: "#406ac1",
+        fontSize: "1rem",
+        fontWeight: "bold",
+        position: "fixed",
+        bottom: "10px",
+        left: "10px",
+        cursor: "pointer",
+    },
+};
 
-const Wrapper = styled.div`
-    font-family: "Do Hyeon", sans-serif;
-    letter-spacing: 1.4px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #f7f7f7;
-    opacity: 0;
-    transform: translateY(10%);
-    animation: ${reveal} 1s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
-`;
 
 
-const Clock = styled.div`
-    font-size: 1.2rem;
-    color: #406ac1;
-    margin-bottom: 10px;
-`;
-
-const Header = styled.div`
-    font-size: calc(20px + 1.5vmin);
-    font-weight: bold;
-    color: #406ac1;
-    text-align: center;
-    margin-bottom: 20px;
-`;
-
-const Input = styled.input`
-    font-family: "Do Hyeon", sans-serif;
-    padding: 0.625rem;
-    border: 1px solid #ccc;
-    border-radius: 0.625rem;
-    width: 250px;
-    text-align: center;
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-`;
-
-const Keypad = styled.div`
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-`;
-
-const KeyButton = styled.button`
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 0.5rem;
-    font-size: 1.5rem;
-    padding: 1rem;
-    color: #406ac1;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    &:hover {
-        background-color: #d0e8f2;
-    }
-
-    &:active {
-        background-color: #90caf9;
-    }
-`;
-
-const Button = styled.button`
-    background-color: ${(props) => (props.highlight ? "#bbdefb" : "#ffffff")};
-    border: none;
-    border-radius: 0.625rem;
-    padding: 0.625rem 1.5625rem;
-    font-size: 1rem;
-    font-weight: bold;
-    color: #406ac1;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    &:hover {
-        background-color: #90caf9;
-        transform: translateY(-5px);
-    }
-
-    &:active {
-        background-color: #64b5f6;
-        transform: translateY(0);
-        box-shadow: none;
-    }
-`;
-
-const QueueList = styled.div`
-    font-family: "Do Hyeon", sans-serif;
-    width: 100%;
-    max-width: 500px;
-    color: #406ac1;
-    background: #ffffff;
-    border: 1px solid #ccc;
-    border-radius: 0.625rem;
-    padding: 1rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-`;
-
-const QueueItem = styled.div`
-    margin-bottom: 0.5rem;
-    font-size: 0.875rem;
-`;
-
-const BackButton = styled.button`
-    font-family: "Do Hyeon", sans-serif;
-    position: fixed;
-    top: 65%;
-    left: -10%;
-    transform: translateY(-50%);
-    background-color: ${(props) => (props.highlight ? "#9fbcd5" : "#c2e5ff")};
-    border: none;
-    border-radius: 3.75rem;
-    padding: 1.25rem 1.875rem;
-    color: #406ac1;
-    font-size: 1.25rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    &:hover {
-        background-color: #90caf9;
-        transform: translateY(-50%) scale(1.1);
-    }
-
-    &:active {
-        background-color: #64b5f6;
-        transform: translateY(-50%) scale(1.0);
-        box-shadow: none;
-    }
-
-    @media (max-width: 1025px) {
-        top: auto;
-        bottom: -15%;
-        left: 50%;
-        transform: translate(-50%, 0);
-        width: 70%;
-        font-size: 1rem;
-        padding: 0.9375rem;
-        border-radius: 1.875rem;
-
-        &:hover {
-            transform: scale(1.0) translate(-50%, 0);
-        }
-
-        &:active {
-            transform: scale(1.0) translate(-50%, 0);
-        }
-    }
-`;
 
 function ReceptionPage() {
     const navigate = useNavigate();
-    const [queue, setQueue] = useState([]);
     const [ssn, setSsn] = useState("");
     const [currentTime, setCurrentTime] = useState("");
+    const { addPatient } = useQueue();
 
     useEffect(() => {
         const updateClock = () => {
             const now = new Date();
             setCurrentTime(now.toLocaleTimeString());
         };
-        updateClock(); // Initialize clock
-        const intervalId = setInterval(updateClock, 1000); // Update every second
-
-        return () => clearInterval(intervalId); // Cleanup on unmount
+        updateClock();
+        const intervalId = setInterval(updateClock, 1000);
+        return () => clearInterval(intervalId);
     }, []);
 
     const handleKeyPress = (value) => {
@@ -191,11 +104,9 @@ function ReceptionPage() {
             if (value === "delete") {
                 return prev.endsWith("-") ? prev.slice(0, -2) : prev.slice(0, -1);
             }
-            // 최대 길이 초과 시 입력 차단
             if (prev.length >= 14) return prev;
 
             const newValue = prev + value;
-            // 6자리에서 '-' 자동 삽입
             if (newValue.length === 6 && !newValue.includes("-")) {
                 return newValue + "-";
             }
@@ -203,25 +114,17 @@ function ReceptionPage() {
         });
     };
 
-    const addPatient = (e) => {
+    const handleAddPatient = (e) => {
         e.preventDefault();
-        if (ssn.length === 14) { // 주민등록번호는 13자리 + '-'
-            const newQueue = [
-                ...queue,
-                {
-                    id: queue.length + 1,
-                    ssn,
-                    estimatedTime: (queue.length + 1) * 10,
-                },
-            ];
-            setQueue(newQueue);
+        if (ssn.length === 14) {
+            const queueNumber = addPatient(ssn); // 대기번호를 반환받음
             Swal.fire({
                 title: "접수 완료!",
-                text: `대기번호는 ${queue.length + 1}번입니다.`,
+                text: `대기번호는 ${queueNumber}번입니다.`,
                 icon: "success",
                 confirmButtonColor: "#406ac1",
             });
-            setSsn("");
+            setSsn(""); // 입력 필드 초기화
         } else {
             Swal.fire({
                 title: "오류",
@@ -232,40 +135,45 @@ function ReceptionPage() {
         }
     };
 
+
+
     return (
-        <Wrapper>
-            <Clock>현재 시간: {currentTime}</Clock>
-            <Header>환자 접수 시스템</Header>
-            <Input
+        <div style={styles.wrapper}>
+            <div style={styles.clock}>현재 시간: {currentTime}</div>
+            <div style={styles.header}>환자 접수 시스템</div>
+            <input
                 type="text"
                 value={ssn}
                 placeholder="주민등록번호"
                 readOnly
+                style={styles.input}
             />
-            <Keypad>
+            <div style={styles.keypad}>
                 {[...Array(10).keys()].map((num) => (
-                    <KeyButton key={num} onClick={() => handleKeyPress(String(num))}>
+                    <button
+                        key={num}
+                        onClick={() => handleKeyPress(String(num))}
+                        style={styles.keyButton}
+                    >
                         {num}
-                    </KeyButton>
+                    </button>
                 ))}
-                <KeyButton onClick={() => handleKeyPress("delete")}>⌫</KeyButton>
-            </Keypad>
-            <QueueList>
-                <h3>현재 대기 상황</h3>
-                {queue.length === 0 ? (
-                    <p>현재 대기 인원이 없습니다.</p>
-                ) : (
-                    queue.map((patient) => (
-                        <QueueItem key={patient.id}>
-                            {patient.id}번 - 주민등록번호: {patient.ssn} - 예상 대기 시간: {patient.estimatedTime}분
-                        </QueueItem>
-                    ))
-                )}
-            </QueueList>
-            <Button onClick={addPatient}>접수</Button>
-            <BackButton onClick={() => navigate("/main")}>뒤로가기</BackButton>
-        </Wrapper>
+                <button onClick={() => handleKeyPress("delete")} style={styles.keyButton}>
+                    ⌫
+                </button>
+            </div>
+            <button onClick={handleAddPatient} style={styles.button}>
+                접수
+            </button>
+            <button onClick={() => navigate("/reception/order")} style={styles.button}>
+                대기 상황 보기
+            </button>
+            <button onClick={() => navigate("/main")} style={styles.backButton}>
+                뒤로가기
+            </button>
+        </div>
     );
 }
+
 
 export default ReceptionPage;

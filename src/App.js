@@ -7,6 +7,8 @@ import StaffCall from "./pages/StaffCall";
 import FloorGuide from "./pages/Floor_guide"
 import ReceptionPage from "./pages/ReceptionPage";
 import Order from "./pages/Order";
+import { QueueProvider } from "./pages/QueueContext";
+
 
 const MainPage = () => {
     const navigate = useNavigate();
@@ -30,17 +32,19 @@ const MainPage = () => {
 
 const App = () => {
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<MainPage />} /> {}
-                <Route path="/main" element={<Main />} /> {}
-                <Route path="/departments" element={<Departments />} /> {}
-                <Route path="/staff-call" element={<StaffCall />} /> {}
-                <Route path="/floor-guide" element={<FloorGuide />} /> {}
-                <Route path="/reception" element={<ReceptionPage />} /> {}
-                <Route path="/reception/order" element={<Order />} /> {}
-            </Routes>
-        </BrowserRouter>
+        <QueueProvider>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<MainPage />} />
+                    <Route path="/main" element={<Main />} />
+                    <Route path="/departments" element={<Departments />} />
+                    <Route path="/staff-call" element={<StaffCall />} />
+                    <Route path="/floor-guide" element={<FloorGuide />} />
+                    <Route path="/reception" element={<ReceptionPage />} />
+                    <Route path="/reception/order" element={<Order />} />
+                </Routes>
+            </BrowserRouter>
+        </QueueProvider>
     );
 };
 
