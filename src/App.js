@@ -6,6 +6,7 @@ import Departments from "./pages/Departments"
 import StaffCall from "./pages/StaffCall";
 import FloorGuide from "./pages/Floor_guide"
 import ReceptionPage from "./pages/ReceptionPage";
+import Order from "./pages/Order";
 
 const MainPage = () => {
     const navigate = useNavigate();
@@ -36,7 +37,8 @@ const App = () => {
                 <Route path="/departments" element={<Departments />} /> {}
                 <Route path="/staff-call" element={<StaffCall />} /> {}
                 <Route path="/floor-guide" element={<FloorGuide />} /> {}
-                <Route path="/reception" element={<ReceptionPage />} />
+                <Route path="/reception" element={<ReceptionPage />} /> {}
+                <Route path="/reception/order" element={<Order />} /> {}
             </Routes>
         </BrowserRouter>
     );

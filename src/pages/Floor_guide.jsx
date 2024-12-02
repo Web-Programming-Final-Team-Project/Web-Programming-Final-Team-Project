@@ -1,6 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState} from "react";
 import styled, { keyframes } from "styled-components";
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 import overallView from "../assets/images/overall_view.png";
 import medicalBuilding1 from "../assets/images/medical_building_1.png";
@@ -20,6 +22,8 @@ import ward3 from "../assets/images/ward_3.png";
 import ward4 from "../assets/images/ward_4.png";
 import ward5 from "../assets/images/ward_5.png";
 import ward6 from "../assets/images/ward_6.png";
+
+
 
 const reveal = keyframes`
     0% {
@@ -50,7 +54,8 @@ const Header = styled.div`
   color: #406ac1;
   text-align: center;
   position: relative;
-
+  margin-bottom: 20px;
+    
     @media (max-width: 1024px) {
         font-size: calc(10px + 3vmin);
     }
@@ -153,13 +158,13 @@ const Image = styled.img`
 const BackButton = styled.button`
     @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Jua&display=swap');
     font-family: "Do Hyeon", sans-serif;
-    position: fixed;
-    top: 65%;
-    left: -30%;
+    position: absolute;
+    top: 50%;
+    left: -25%;
     transform: translateY(-50%);
     background-color: ${(props) => (props.highlight ? "#9fbcd5" : "#c2e5ff")};
     border: none;
-    border-radius: 3.75rem; 
+    border-radius: 3.75rem;
     padding: 1.25rem 1.875rem;
     color: #406ac1;
     font-size: 1.25rem;
@@ -185,9 +190,9 @@ const BackButton = styled.button`
         left: 50%;
         transform: translate(-50%, 0);
         width: 70%;
-        font-size: 1rem; 
+        font-size: 1rem;
         padding: 0.9375rem;
-        border-radius: 1.875rem;  
+        border-radius: 1.875rem;
 
         &:hover {
             transform: scale(1.0) translate(-50%, 0);
@@ -199,118 +204,61 @@ const BackButton = styled.button`
     }
 `;
 
-const AutoCompleteList = styled.ul`
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    width: 100%; 
-    background: #ffffff;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    position: absolute;
-    top: 100%; 
-    left: 0; 
-    z-index: 10;
-    overflow-y: auto;
-    max-height: 200px;
-    box-sizing: border-box;
-`;
-
-const AutoCompleteItem = styled.li`
-    padding: 10px 15px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    color: #406ac1;
-    border-bottom: 1px solid #ccc; 
-
-    &:hover {
-        background-color: #f0f0f0;
-    }
-
-    &:last-child {
-        border-bottom: none;
-    }
-`;
-
-const SearchContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    margin: 20px auto;
-    width: 100%;
-    max-width: 700px;
-    gap: 10px;
-    position: relative;
-
-    @media (max-width: 768px) {
-        flex-direction: column; 
-        gap: 15px; 
-    }
-`;
-
-const SearchInput = styled.input`
-    font-family: "Do Hyeon", sans-serif;
-    flex: 1;
-    padding: 10px 15px;
-    font-size: calc(10px + 1.5vmin);
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    outline: none;
-    transition: border-color 0.3s ease;
-    min-width: 250px; 
-    max-width: 300px;
-
-    &:focus {
-        border-color: #406ac1;
-    }
-
-    @media (max-width: 768px) {
-        font-size: calc(8px + 1.3vmin);
-        padding: 8px 12px;
-        min-width: 250px; 
-        max-width: 300px;
-    }
-`;
 
 const SearchButton = styled.button`
+    @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Jua&display=swap');
     font-family: "Do Hyeon", sans-serif;
-    padding: 10px 20px;
-    font-size: calc(10px + 1.5vmin);
-    font-weight: bold;
-    color: #ffffff;
-    background-color: #406ac1;
+    position: absolute;
+    top: 50%;
+    right: -20%; 
+    transform: translateY(-50%);
+    background-color: ${(props) => (props.highlight ? "#9fbcd5" : "#c2e5ff")};
     border: none;
-    border-radius: 8px;
+    border-radius: 3.75rem;
+    padding: 1.25rem 1.875rem;
+    color: #406ac1;
+    font-size: 1.25rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    min-width: 100px;
-    max-width: 120px; 
+
 
     &:hover {
         background-color: #90caf9;
+        transform: translateY(-50%) scale(1.1);
     }
 
     &:active {
         background-color: #64b5f6;
+        transform: translateY(-50%) scale(1.0);
         box-shadow: none;
     }
 
-    @media (max-width: 768px) {
-        font-size: calc(8px + 1.3vmin);
-        padding: 8px 16px;
-        min-width: 100px; 
-        max-width: 120px;
+    @media (max-width: 1025px) {
+        top: auto;
+        bottom: -15%;
+        right: 50%;
+        transform: translate(50%, 0);
+        width: 70%;
+        font-size: 1rem;
+        padding: 0.9375rem;
+        border-radius: 1.875rem;
+
+        &:hover {
+            transform: scale(1.0) translate(50%, 0);
+        }
+
+        &:active {
+            transform: scale(1.0) translate(50%, 0);
+        }
     }
 `;
 
-function FloorGuide() {
-    const navigate = useNavigate();
 
-    const categories = {
+
+
+const categories  = {
         "전체 조감도": [overallView],
         진료동: [
             { label: "1층", image: medicalBuilding1, keywords: ["재활의학과", "약제","의료정보팀","정신건강의학과",
@@ -363,122 +311,154 @@ function FloorGuide() {
         ],
     };
 
+function FloorGuide() {
+    const navigate = useNavigate();
     const [activeCategory, setActiveCategory] = useState("전체 조감도");
     const [selectedImage, setSelectedImage] = useState(
         categories["전체 조감도"][0]
     );
-    const [searchQuery, setSearchQuery] = useState("");
-    const [suggestions, setSuggestions] = useState([]);
 
-    const suggestionsRef = useRef(null);
+    const handleSearch = () => {
+        const allCategories = Object.keys(categories).filter(
+            (category) => category !== "전체 조감도" // "전체 조감도" 제외
+        );
+
+        // Step 1: 카테고리 선택
+        Swal.fire({
+            title: "병원단지를 선택하세요",
+            input: "select",
+            inputOptions: allCategories.reduce((options, category) => {
+                options[category] = category;
+                return options;
+            }, {}),
+            inputPlaceholder: "여기를 눌러주세요 !",
+            showCancelButton: true,
+            confirmButtonText: "다음",
+            cancelButtonText: "취소",
+            reverseButtons: true,
+            allowOutsideClick: true,
+            heightAuto: false,
+            backdrop: 'rgba(0, 0, 0, 0.8)'
+        }).then((categoryResult) => {
+            if (categoryResult.isConfirmed && categoryResult.value) {
+                const selectedCategory = categoryResult.value;
+
+                // Step 2: 키워드 선택
+                const categoryKeywords = categories[selectedCategory]
+                    .flatMap((floor) => floor.keywords || [])
+                    .reduce((unique, keyword) => {
+                        if (!unique.includes(keyword)) unique.push(keyword);
+                        return unique;
+                    }, []);
+
+                if (categoryKeywords.length > 0) {
+                    Swal.fire({
+                        title: "진료과 및 병동을 선택하세요",
+                        html: `
+                        <div style="max-height: 200px; overflow-y: auto; text-align: left; padding: 10px; border: 1px solid #ccc; border-radius: 8px;">
+                            ${categoryKeywords
+                            .map(
+                                (keyword) =>
+                                    `<div style="
+                                            margin-bottom: 8px;
+                                            padding: 8px 0;
+                                            cursor: pointer;
+                                            font-size: 16px;
+                                            color: #406ac1;
+                                            border-bottom: 1px solid #ccc;
+                                        " onclick="window.selectKeyword('${keyword}')">
+                                            ${keyword}
+                                        </div>`
+                            )
+                            .join("")}
+                        </div>
+                    `,
+                        showCancelButton: true,
+                        cancelButtonText: "취소",
+                        showConfirmButton: false,
+                        allowOutsideClick: true,
+                        heightAuto: false,
+                        backdrop: 'rgba(0, 0, 0, 0.8)'
+                    });
+
+                    // 선택된 키워드를 처리하는 글로벌 함수
+                    window.selectKeyword = (selectedKeyword) => {
+                        Swal.close(); // 현재 Swal 닫기
+                        const targetFloor = categories[selectedCategory].find((floor) =>
+                            floor.keywords?.includes(selectedKeyword)
+                        );
+
+                        if (targetFloor) {
+                            Swal.fire({
+                                title: `
+            ${selectedKeyword}<br>
+            ${selectedCategory} ${targetFloor.label}에 위치합니다.
+        `,
+                                confirmButtonText: "확인",
+                                cancelButtonText: "취소",
+                                reverseButtons: true,
+                                allowOutsideClick: true,
+                                heightAuto: false,
+                                backdrop: 'rgba(0, 0, 0, 0.8)'
+                            }).then(() => {
+                                setActiveCategory(selectedCategory);
+                                setSelectedImage(targetFloor.image);
+                                document
+                                    .querySelector(`[data-category="${selectedCategory}"]`)
+                                    ?.scrollIntoView({
+                                        behavior: "smooth",
+                                        block: "취소",
+                                    });
+                            });
+                        } else {
+                            Swal.fire({
+                                title: "해당 키워드에 대한 정보를 찾을 수 없습니다.",
+                                confirmButtonText: "확인",
+                                cancelButtonText: "취소",
+                                reverseButtons: true,
+                                allowOutsideClick: true,
+                                heightAuto: false,
+                                backdrop: 'rgba(0, 0, 0, 0.8)'
+                            });
+                        }
+                    };
+                } else {
+                    Swal.fire({
+                        title: "선택한 카테고리에 키워드가 없습니다.",
+                        confirmButtonText: "확인",
+                        cancelButtonText: "취소",
+                        reverseButtons: true,
+                        allowOutsideClick: true,
+                        heightAuto: false,
+                        backdrop: 'rgba(0, 0, 0, 0.8)'
+                    });
+                }
+            }
+        });
+    };
+
+
+
+
+    window.selectCategory = (category) => {
+        Swal.close();
+        setActiveCategory(category);
+        setSelectedImage(categories[category][0]?.image || categories[category][0]);
+
+        document.querySelector(`[data-category="${category}"]`)?.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+        });
+    };
 
     const handleCategoryChange = (category) => {
         setActiveCategory(category);
         setSelectedImage(categories[category][0]?.image || categories[category][0]);
     };
 
-    const handleSearchChange = (e) => {
-        const query = e.target.value;
-        setSearchQuery(query);
-
-        if (query.length > 0) {
-            const newSuggestions = [];
-
-            for (const category in categories) {
-                for (const item of categories[category]) {
-                    item.keywords?.forEach((keyword) => {
-                        if (keyword.includes(query) && !newSuggestions.includes(keyword)) {
-                            newSuggestions.push(keyword);
-                        }
-                    });
-                }
-            }
-
-            setSuggestions(newSuggestions.slice(0, 10));
-        } else {
-            setSuggestions([]);
-        }
-    };
-
-    const handleSuggestionClick = (suggestion) => {
-        setSearchQuery(suggestion);
-        setSuggestions([]);
-    };
-
-    const handleSearch = () => {
-        for (const category in categories) {
-            for (const item of categories[category]) {
-                if (item.keywords?.includes(searchQuery)) {
-                    setActiveCategory(category);
-                    setSelectedImage(item.image);
-                    return;
-                }
-            }
-        }
-        alert("검색 결과가 없습니다.");
-    };
-
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (
-                suggestionsRef.current &&
-                !suggestionsRef.current.contains(event.target)
-            ) {
-                setSuggestions([]);
-            }
-        };
-
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
-
     return (
         <Wrapper>
-            <Header>보고 싶은 층이나 건물을 검색 혹은 선택하세요.</Header>
-
-            <SearchContainer>
-                <SearchInput
-                    type="text"
-                    placeholder="검색어를 입력하세요"
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                />
-                {suggestions.length > 0 && (
-                    <AutoCompleteList ref={suggestionsRef}>
-                        {suggestions.map((suggestion, index) => (
-                            <AutoCompleteItem
-                                key={index}
-                                onClick={() => handleSuggestionClick(suggestion)}
-                            >
-                                {suggestion}
-                            </AutoCompleteItem>
-                        ))}
-                    </AutoCompleteList>
-                )}
-                <SearchButton onClick={handleSearch}>검색</SearchButton>
-            </SearchContainer>
-
-            {activeCategory === "전체 조감도" ? null : (
-                <Grid>
-                    {categories[activeCategory].map((item, index) => (
-                        <Button
-                            key={index}
-                            active={selectedImage === item.image}
-                            onClick={() => setSelectedImage(item.image)}
-                        >
-                            {item.label}
-                        </Button>
-                    ))}
-                </Grid>
-            )}
-
-            <Image
-                src={selectedImage}
-                alt={activeCategory === "전체 조감도" ? "전체 조감도" : `${activeCategory} 이미지`}
-            />
-
+            <Header>원하는 층이나 건물을 검색 혹은 선택해 보세요 !</Header>
             <Tabs>
                 {Object.keys(categories).map((category) => (
                     <Tab
@@ -491,6 +471,23 @@ function FloorGuide() {
                 ))}
             </Tabs>
 
+                <Image src={selectedImage} alt={activeCategory} />
+                    <BackButton onClick={() => navigate(-1)}>뒤로가기</BackButton>
+                    <SearchButton onClick={handleSearch}>검색</SearchButton>
+
+            {activeCategory !== "전체 조감도" && (
+                <Grid>
+                    {categories[activeCategory].map((item, index) => (
+                        <Button
+                            key={index}
+                            active={selectedImage === item.image}
+                            onClick={() => setSelectedImage(item.image)}
+                        >
+                            {item.label}
+                        </Button>
+                    ))}
+                </Grid>
+            )}
             <BackButton onClick={() => navigate(-1)}>뒤로가기</BackButton>
         </Wrapper>
     );
