@@ -1,70 +1,104 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import styled, {keyframes} from "styled-components";
 import { useQueue } from "./QueueContext";
 
-const styles = {
-    wrapper: {
-        fontFamily: "'Do Hyeon', sans-serif",
-        letterSpacing: "1.4px",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        backgroundColor: "#f7f7f7",
-        padding: "20px",
-        height: "100vh",
-    },
-    clock: {
-        fontSize: "1.2rem",
-        color: "#406ac1",
-        marginBottom: "10px",
-    },
-    header: {
-        fontSize: "calc(20px + 1.5vmin)",
-        fontWeight: "bold",
-        color: "#406ac1",
-        textAlign: "center",
-        marginBottom: "20px",
-    },
-    queueList: {
-        fontFamily: "'Do Hyeon', sans-serif",
-        width: "100%",
-        maxWidth: "500px",
-        color: "#406ac1",
-        background: "#ffffff",
-        border: "1px solid #ccc",
-        borderRadius: "10px",
-        padding: "20px",
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-    },
-    queueHeader: {
-        fontSize: "1.2rem",
-        fontWeight: "bold",
-        color: "#406ac1",
-        marginBottom: "15px",
-    },
-    emptyMessage: {
-        fontSize: "1rem",
-        color: "#406ac1",
-    },
-    queueItem: {
-        marginBottom: "10px",
-        fontSize: "1rem",
-        color: "#406ac1",
-    },
-    backButton: {
-        backgroundColor: "#c2e5ff",
-        border: "none",
-        borderRadius: "30px",
-        padding: "15px 30px",
-        color: "#406ac1",
-        fontSize: "1rem",
-        fontWeight: "bold",
-        position: "fixed",
-        bottom: "10px",
-        left: "10px",
-        cursor: "pointer",
-    },
-};
+const reveal = keyframes`
+    0% {
+        opacity: 0;
+        transform: translateY(10%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+`;
+
+const Wrapper = styled.div`
+    @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Jua&display=swap');
+    font-family: "Do Hyeon", sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    background-color: #f7f7f7;
+    animation: ${reveal} 1s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+    padding-bottom: 30%; 
+`;
+
+const Clock = styled.div`
+    font-size: 2rem;
+    color: #406ac1;
+    font-weight: bold;
+    margin-bottom: 20px;
+    white-space: nowrap;
+`;
+
+const Header = styled.div`
+    font-size: calc(30px + 1.5vmin);
+    font-weight: bold;
+    color: #35579e;
+    text-align: center;
+    margin-bottom: 20px;
+    white-space: nowrap;
+`;
+
+const QueueList = styled.div`
+    font-family: 'Do Hyeon', sans-serif;
+    width: 100%;
+    max-width: 500px;
+    color: #406ac1;
+    background: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+`;
+
+
+const EmptyMessage = styled.div`
+    font-size: 1rem;
+    color: #406ac1;
+`;
+
+const QueueItem = styled.div`
+    margin-bottom: 10px;
+    font-size: 1rem;
+    color: #406ac1;
+`;
+
+const BackButton = styled.button`
+    @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Jua&display=swap');
+    font-family: "Do Hyeon", sans-serif;
+    position: absolute; 
+    top: 40%;
+    left: -30%; 
+    transform: translate(-120%, -50%);
+    background-color: ${(props) => (props.highlight ? "#9fbcd5" : "#c2e5ff")};
+    border: none;
+    border-radius: 3.75rem;
+    padding: 1.25rem 1.875rem;
+    color: #406ac1;
+    font-size: 1.25rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background-color: #90caf9;
+        transform: translate(-120%, -50%) scale(1.1);
+    }
+
+    &:active {
+        background-color: #64b5f6;
+        transform: translate(-120%, -50%) scale(1.0);
+        box-shadow: none;
+    }
+
+ 
+`;
 
 
 function Order() {
@@ -83,26 +117,23 @@ function Order() {
     }, []);
 
     return (
-        <div style={styles.wrapper}>
-            <div style={styles.clock}>현재 시간: {currentTime}</div>
-            <div style={styles.header}>환자 접수 시스템</div>
-            <div style={styles.queueList}>
-                <h3 style={styles.queueHeader}>현재 대기 상황</h3>
+        <Wrapper>
+            <Clock>현재 시간: {currentTime}</Clock>
+            <Header>현재 대기 현황</Header>
+            <QueueList>
                 {queue.length === 0 ? (
-                    <p style={styles.emptyMessage}>현재 대기 인원이 없습니다.</p>
+                    <EmptyMessage>현재 대기 인원이 없습니다.</EmptyMessage>
                 ) : (
                     queue.map((patient) => (
-                        <div key={patient.id} style={styles.queueItem}>
+                        <QueueItem key={patient.id}>
                             {patient.id}번 - 주민등록번호: {patient.ssn} - 예상 대기 시간:{" "}
                             {patient.estimatedTime}분
-                        </div>
+                        </QueueItem>
                     ))
                 )}
-            </div>
-            <button onClick={() => navigate("/reception")} style={styles.backButton}>
-                뒤로가기
-            </button>
-        </div>
+            </QueueList>
+            <BackButton onClick={() => navigate("/reception")}>뒤로가기</BackButton>
+        </Wrapper>
     );
 }
 

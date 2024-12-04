@@ -39,13 +39,13 @@ const reveal = keyframes`
 const Wrapper = styled.div`
     @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Jua&display=swap');
     font-family: "Do Hyeon", sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #f7f7f7;
-  opacity: 0;
-  transform: translateY(10%);
-  animation: ${reveal} 1s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f7f7f7;
+    opacity: 0;
+    transform: translateY(10%);
+    animation: ${reveal} 1s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
 `;
 
 const Header = styled.div`
@@ -55,10 +55,8 @@ const Header = styled.div`
   text-align: center;
   position: relative;
   margin-bottom: 20px;
+    white-space: nowrap;
     
-    @media (max-width: 1024px) {
-        font-size: calc(10px + 3vmin);
-    }
 `;
 
 const Tabs = styled.div`
@@ -90,11 +88,6 @@ const Tab = styled.button`
     transform: translateY(0);
     box-shadow: none;
   }
-
-    @media (max-width: 1024px) {
-        font-size: calc(5px + 1.3vmin);
-        padding: 8px 12px;
-    }
     
 `;
 
@@ -139,11 +132,7 @@ const Button = styled.button`
         transform: translateY(0);
         box-shadow: none;
     }
-
-    @media (max-width: 1024px) {
-        font-size: calc(5px + 1.3vmin);
-        padding: 8px 12px;
-    }
+    
 `;
 
 
@@ -183,25 +172,7 @@ const BackButton = styled.button`
         transform: translateY(-50%) scale(1.0);
         box-shadow: none;
     }
-
-    @media (max-width: 1025px) {
-        top: auto;
-        bottom: -15%;
-        left: 50%;
-        transform: translate(-50%, 0);
-        width: 70%;
-        font-size: 1rem;
-        padding: 0.9375rem;
-        border-radius: 1.875rem;
-
-        &:hover {
-            transform: scale(1.0) translate(-50%, 0);
-        }
-
-        &:active {
-            transform: scale(1.0) translate(-50%, 0);
-        }
-    }
+    
 `;
 
 
@@ -234,25 +205,7 @@ const SearchButton = styled.button`
         transform: translateY(-50%) scale(1.0);
         box-shadow: none;
     }
-
-    @media (max-width: 1025px) {
-        top: auto;
-        bottom: -15%;
-        right: 50%;
-        transform: translate(50%, 0);
-        width: 70%;
-        font-size: 1rem;
-        padding: 0.9375rem;
-        border-radius: 1.875rem;
-
-        &:hover {
-            transform: scale(1.0) translate(50%, 0);
-        }
-
-        &:active {
-            transform: scale(1.0) translate(50%, 0);
-        }
-    }
+    
 `;
 
 
@@ -320,10 +273,10 @@ function FloorGuide() {
 
     const handleSearch = () => {
         const allCategories = Object.keys(categories).filter(
-            (category) => category !== "전체 조감도" // "전체 조감도" 제외
+            (category) => category !== "전체 조감도"
         );
 
-        // Step 1: 카테고리 선택
+
         Swal.fire({
             title: "병원단지를 선택하세요",
             input: "select",
@@ -334,7 +287,9 @@ function FloorGuide() {
             inputPlaceholder: "여기를 눌러주세요 !",
             showCancelButton: true,
             confirmButtonText: "다음",
+            confirmButtonColor: "#406ac1",
             cancelButtonText: "취소",
+            cancelButtonColor: "#90caf9",
             reverseButtons: true,
             allowOutsideClick: true,
             heightAuto: false,
@@ -343,7 +298,7 @@ function FloorGuide() {
             if (categoryResult.isConfirmed && categoryResult.value) {
                 const selectedCategory = categoryResult.value;
 
-                // Step 2: 키워드 선택
+
                 const categoryKeywords = categories[selectedCategory]
                     .flatMap((floor) => floor.keywords || [])
                     .reduce((unique, keyword) => {
@@ -375,15 +330,16 @@ function FloorGuide() {
                     `,
                         showCancelButton: true,
                         cancelButtonText: "취소",
+                        cancelButtonColor: "#90caf9",
                         showConfirmButton: false,
                         allowOutsideClick: true,
                         heightAuto: false,
                         backdrop: 'rgba(0, 0, 0, 0.8)'
                     });
 
-                    // 선택된 키워드를 처리하는 글로벌 함수
+
                     window.selectKeyword = (selectedKeyword) => {
-                        Swal.close(); // 현재 Swal 닫기
+                        Swal.close();
                         const targetFloor = categories[selectedCategory].find((floor) =>
                             floor.keywords?.includes(selectedKeyword)
                         );
@@ -395,6 +351,7 @@ function FloorGuide() {
             ${selectedCategory} ${targetFloor.label}에 위치합니다.
         `,
                                 confirmButtonText: "확인",
+                                confirmButtonColor: "#406ac1",
                                 cancelButtonText: "취소",
                                 reverseButtons: true,
                                 allowOutsideClick: true,
@@ -471,7 +428,7 @@ function FloorGuide() {
                 ))}
             </Tabs>
 
-                <Image src={selectedImage} alt={activeCategory} />
+                    <Image src={selectedImage} alt={activeCategory} />
                     <BackButton onClick={() => navigate(-1)}>뒤로가기</BackButton>
                     <SearchButton onClick={handleSearch}>검색</SearchButton>
 

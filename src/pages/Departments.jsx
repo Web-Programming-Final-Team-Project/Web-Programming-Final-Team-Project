@@ -34,6 +34,7 @@ const Header = styled.div`
     color: #406ac1;
     text-align: center;
     position: relative;
+    white-space: nowrap; 
 `;
 
 const Tabs = styled.div`
@@ -71,10 +72,6 @@ const Tab = styled.button`
         box-shadow: none;
     }
     
-    @media (max-width: 768px) {
-        height: 2.5rem;
-        font-size: 0.7rem; 
-    }
 `;
 
 const Grid = styled.div`
@@ -110,11 +107,7 @@ const Button = styled.button`
         transform: translateY(0);
         box-shadow: none;
     }
-
-    @media (max-width: 768px) {
-        height: 4.5rem;
-        font-size: 0.8rem;
-    }
+    
 `;
 
 const BackButton = styled.button`
@@ -145,25 +138,7 @@ const BackButton = styled.button`
         transform: translateY(-50%) scale(1.0);
         box-shadow: none;
     }
-
-    @media (max-width: 1025px) {
-        top: auto;
-        bottom: -15%;
-        left: 50%;
-        transform: translate(-50%, 0);
-        width: 70%;
-        font-size: 1rem; 
-        padding: 0.9375rem;
-        border-radius: 1.875rem;  
-
-        &:hover {
-            transform: scale(1.0) translate(-50%, 0);
-        }
-
-        &:active {
-            transform: scale(1.0) translate(-50%, 0);
-        }
-    }
+    
 `;
 
 function Departments() {
@@ -194,7 +169,6 @@ function Departments() {
                 cancelButtonColor: "#90caf9",
             }).then((result) => {
                 if (result.dismiss === Swal.DismissReason.cancel) {
-                    // Navigate to the reception page
                     navigate("/reception");
                 }
             });

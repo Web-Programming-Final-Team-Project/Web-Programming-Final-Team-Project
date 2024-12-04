@@ -68,16 +68,6 @@ const Button = styled.button`
         box-shadow: none;
     }
 
-    @media (max-width: 767px) {
-        padding: 2.5rem 2rem;
-        font-size: 1.5rem;
-    }
-
-    @media (max-width: 480px) {
-        padding: 2rem 1.5rem; 
-        font-size: 1.25rem; 
-    }
-    
 `;
 
 function Main() {
